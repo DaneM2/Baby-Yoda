@@ -1,2 +1,0 @@
-# Baby-Yoda
-Side Projects!
