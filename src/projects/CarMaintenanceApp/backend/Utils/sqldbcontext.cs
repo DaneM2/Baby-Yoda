@@ -1,10 +1,25 @@
-public class ApplicationDbContext : DbContext
-{
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-    public DbSet<Car> Cars { get; set; }
-    // Define other DbSet properties for other entities here
+namespace CarMaintenanceApp.backend.Utils.sqldbcontext
+{
+    public class CarMaintenanceDbContext : DbContext
+    {
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<ServiceRecord> ServiceRecords { get; set; }
+        private readonly IConfiguration _configuration;
+
+        public CarMaintenanceDbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var connectionString = _configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
 }
